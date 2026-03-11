@@ -1,9 +1,3 @@
-¡Claro que sí, yean carlos! Es un excelente paso para darle profesionalismo a tu proyecto de la Secretaría Ejecutiva de Desarrollo Económico.
-
-Considerando que tu sistema utiliza Firebase para la persistencia de datos y tiene una interfaz enfocada en la gestión de emprendedores, he diseñado este README.md siguiendo tus estándares: código real, estructura limpia y mención de las arquitecturas aplicadas.
-
-Aquí tienes el contenido para tu archivo:
-
 Sistema de Registro - Secretaría Ejecutiva de Desarrollo Económico
 Este proyecto es una plataforma web profesional diseñada para la gestión, registro y visualización de emprendedores y empresas. Está enfocada en centralizar la información económica para facilitar la toma de decisiones y el apoyo al sector productivo.
 
