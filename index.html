@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secretaria Ejecutiva Desarrollo Economico - Emprendedores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --granate: #56070c;
+            --granate-dark: #3a0408;
+            --granate-light: #7a0a12;
+            --dorado: #FFD700;
+            --dorado-dark: #e6c200;
+            --rojo: #EF4135;
+            --rojo-dark: #CC0000;
+            --blanco: #ffffff;
+            --gris-claro: #f5f3f0;
+            --gris-medio: #e8e3dc;
+            --texto: #1a0305;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, rgba(120, 20, 40, 0.75) 0%, rgba(80, 10, 20, 0.75) 100%), url('gobernador.jpg?v=2');
+            background-size: 100% 100%;
+            background-position: 95% center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 35vh auto 0;
+            background: var(--blanco);
+            border-radius: 4px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 12s ease, transform 12s ease;
+        }
+
+        .container.loaded { opacity: 1; transform: translateY(0); }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--granate) 0%, var(--granate-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-top-bar { background: var(--dorado); height: 5px; position: relative; z-index: 3; }
+        .header-inner { padding: 25px 35px 35px; position: relative; z-index: 3; }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; right: 0;
+            height: 40px;
+            background: var(--blanco);
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+
+        .header-pattern {
+            position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 10% 50%, rgba(255,215,0,0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 30%, rgba(239,65,53,0.1) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .logo-row { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+
+        .logo {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--dorado);
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 0 6px rgba(255,215,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .header-title-block { flex: 1; text-align: center; }
+
+        .header-eyebrow {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--dorado); opacity: 0.8; margin-bottom: 10px;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; font-weight: 900; color: var(--blanco);
+            line-height: 1.15; text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+
+        .title span { display: block; color: var(--dorado); font-size: 2.6rem; }
+
+        /* STATS */
+        .stats-band {
+            background: var(--gris-claro);
+            border-bottom: 1px solid var(--gris-medio);
+            padding: 30px 50px;
+        }
+
+        .stats { display: flex; justify-content: center; gap: 0; }
+
+        .stat-card {
+            flex: 1; max-width: 220px; text-align: center;
+            padding: 20px 30px; position: relative;
+        }
+
+        .stat-card:not(:last-child)::after {
+            content: ''; position: absolute; right: 0; top: 20%; height: 60%;
+            width: 1px; background: var(--gris-medio);
+        }
+
+        .stat-icon {
+            width: 44px; height: 44px; background: var(--granate);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px; color: var(--dorado); font-size: 1.1rem;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem; font-weight: 700; color: var(--granate); line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem; font-weight: 500; color: #888;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;
+        }
+
+        /* CONTENT */
+        .content { padding: 30px 35px; }
+
+        /* SECTION */
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 35px; }
+
+        .section-icon {
+            width: 48px; height: 48px; background: var(--granate);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            color: var(--dorado); font-size: 1.2rem; flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; color: var(--granate); font-weight: 700;
+        }
+
+        .section-title small {
+            display: block; font-family: 'Inter', sans-serif;
+            font-size: 0.78rem; font-weight: 400; color: #999;
+            margin-top: 2px; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        .divider { flex: 1; height: 1px; background: linear-gradient(to right, var(--gris-medio), transparent); }
+
+        /* LOGIN */
+        .login-container { display: flex; justify-content: center; }
+
+        .login-card {
+            background: var(--gris-claro); border: 1px solid var(--gris-medio);
+            border-radius: 16px; padding: 45px 50px; width: 100%; max-width: 480px;
+            position: relative; overflow: hidden;
+        }
+
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(to right, var(--granate), var(--dorado), var(--rojo));
+        }
+
+        .login-icon {
+            width: 64px; height: 64px; background: var(--granate); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 25px; color: var(--dorado); font-size: 1.6rem;
+            box-shadow: 0 8px 20px rgba(86,7,12,0.3);
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            color: var(--granate); font-weight: 700; text-align: center; margin-bottom: 8px;
+        }
+
+        .login-sub { text-align: center; color: #999; font-size: 0.85rem; margin-bottom: 35px; }
+
+        /* FORM */
+        .form-group { margin-bottom: 22px; }
+
+        label {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+            color: var(--granate); font-weight: 600; font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        label i { color: var(--rojo); font-size: 0.85rem; }
+
+        input, select, textarea {
+            width: 100%; padding: 13px 16px;
+            border: 1.5px solid var(--gris-medio); border-radius: 10px;
+            font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease; background: var(--blanco); color: var(--texto);
+        }
+
+        input:hover, select:hover, textarea:hover { border-color: #c9bba8; }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--granate);
+            box-shadow: 0 0 0 3px rgba(86,7,12,0.1);
+        }
+
+        textarea { resize: vertical; min-height: 110px; }
+
+        .form-container {
+            background: var(--gris-claro); border: 1px solid var(--gris-medio);
+            border-radius: 16px; padding: 40px;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .form-section { margin-bottom: 35px; }
+
+        .form-section-label {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--rojo); margin-bottom: 20px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--gris-medio);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px 36px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 0.88rem; font-weight: 600; font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .btn-primary { background: var(--granate); color: var(--blanco); box-shadow: 0 4px 15px rgba(86,7,12,0.3); }
+        .btn-primary:hover { background: var(--granate-light); box-shadow: 0 8px 25px rgba(86,7,12,0.45); transform: translateY(-2px); }
+
+        .btn-accent { background: var(--rojo); color: var(--blanco); box-shadow: 0 4px 15px rgba(239,65,53,0.3); }
+        .btn-accent:hover { background: var(--rojo-dark); box-shadow: 0 8px 25px rgba(239,65,53,0.45); transform: translateY(-2px); }
+
+        .btn-muted { background: #888; color: var(--blanco); }
+        .btn-muted:hover { background: #666; transform: translateY(-2px); }
+
+        .form-actions {
+            display: flex; justify-content: center; gap: 15px;
+            margin-top: 35px; padding-top: 30px; border-top: 1px solid var(--gris-medio);
+        }
+
+        /* FOOTER */
+        .footer { background: var(--granate); padding: 35px 50px; position: relative; overflow: hidden; }
+
+        .footer::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(to right, var(--dorado), var(--rojo), var(--dorado));
+        }
+
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+
+        .footer-text p { color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; }
+        .footer-text p:first-child { color: var(--blanco); font-weight: 600; font-size: 0.9rem; }
+
+        .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+
+        .admin-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); color: var(--dorado);
+            padding: 10px 20px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px;
+            transition: all 0.25s ease; border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .admin-link:hover { background: rgba(255,215,0,0.15); border-color: var(--dorado); transform: translateX(-3px); }
+
+        .social-links { display: flex; gap: 10px; }
+
+        .social-link {
+            width: 38px; height: 38px; background: rgba(255,255,255,0.1);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6); font-size: 1rem; transition: all 0.25s ease; text-decoration: none;
+        }
+
+        .social-link:hover { background: var(--dorado); color: var(--granate); transform: translateY(-3px); }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed; top: 25px; right: 25px;
+            padding: 14px 22px; background: var(--granate); color: white;
+            border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: none; z-index: 9999; font-size: 0.9rem; font-weight: 500;
+            border-left: 4px solid var(--dorado);
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.error { background: var(--rojo-dark); }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            .header-inner { padding: 25px 20px 40px; }
+            .logo { width: 75px; height: 75px; }
+            .title { font-size: 1.4rem; }
+            .title span { font-size: 1.8rem; }
+            .stats-band { padding: 20px; }
+            .stats { flex-wrap: wrap; }
+            .content { padding: 25px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-container { padding: 20px; }
+            .login-card { padding: 30px 25px; }
+            .footer { padding: 25px 20px; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+            .footer-right { align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+
+        <div class="header">
+            <div class="header-top-bar"></div>
+            <div class="header-pattern"></div>
+            <div class="header-inner">
+                <div class="logo-row">
+                    <img src="logo 1.jpg" alt="Logo Institucional" class="logo">
+                    <div class="header-title-block">
+                        <div class="header-eyebrow">República Bolivariana de Venezuela</div>
+                        <h1 class="title">
+                            Secretaría Ejecutiva
+                            <span>Desarrollo Económico</span>
+                        </h1>
+                    </div>
+                    <img src="logo 2.jpg" alt="Logo Secundario" class="logo">
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-band">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-building"></i></div>
+                    <div class="stat-number" id="totalEmpresas">0</div>
+                    <div class="stat-label">Empresas Registradas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-number" id="totalEmpleados">0</div>
+                    <div class="stat-label">Empleados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="stat-number" id="totalMunicipios">0</div>
+                    <div class="stat-label">Municipios</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div id="loginContainer" class="login-container">
+                <div class="login-card">
+                    <div class="login-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="login-title">Acceso Seguro</h3>
+                    <p class="login-sub">Ingrese sus credenciales para continuar</p>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                            <input type="email" id="email" name="email" placeholder="Usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="accessPassword"><i class="fas fa-lock"></i> Contraseña de Acceso</label>
+                            <input type="password" id="accessPassword" name="accessPassword" placeholder="••••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-accent" style="width:100%; margin-top:10px;">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="hidden" id="formContainer">
+                <div class="section-header">
+                    <div class="section-icon"><i class="fas fa-pen-to-square"></i></div>
+                    <div class="section-title">
+                        Registro de Emprendimiento
+                        <small>Complete todos los campos requeridos</small>
+                    </div>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="form-container">
+                    <form id="empresaForm">
+
+                        <div class="form-section">
+                            <div class="form-section-label"><i class="fas fa-info-circle"></i> Información General</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nombreEmpresa"><i class="fas fa-building"></i> Nombre del Emprendimiento</label>
+                                    <input type="text" id="nombreEmpresa" name="nombreEmpresa" placeholder="Nombre completo..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rifCedula"><i class="fas fa-id-card"></i> RIF / Cédula</label>
+                                    <input type="text" id="rifCedula" name="rifCedula" placeholder="J-00000000-0" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sector"><i class="fas fa-industry"></i> Sector Económico</label>
+                                    <select id="sector" name="sector" required>
+                                        <option value="">Seleccione un sector</option>
+                                        
+                                        <!-- Agricultura -->
+                                        <optgroup label="🌾 Agricultura y Agropecuario">
+                                            <option value="agricultura">Agricultura</option>
+                                            <option value="ganaderia">Ganadería</option>
+                                            <option value="avicultura">Avicultura</option>
+                                            <option value="porcicultura">Porcicultura</option>
+                                            <option value="piscicultura">Piscicultura</option>
+                                            <option value="apicultura">Apicultura</option>
+                                            <option value="cultivos_tropicales">Cultivos Tropicales</option>
+                                            <option value="horticultura">Horticultura</option>
+                                            <option value="fruticultura">Fruticultura</option>
+                                            <option value="cacao">Cacao</option>
+                                            <option value="cafe">Café</option>
+                                            <option value="cana_azucar">Caña de Azúcar</option>
+                                            <option value="arroz">Arroz</option>
+                                            <option value="maiz">Maíz</option>
+                                            <option value="caraotas">Caraotas</option>
+                                            <option value="yuca">Yuca</option>
+                                            <option value="platano">Plátano</option>
+                                            <option value="citricos">Cítricos</option>
+                                            <option value="forestal">Forestal</option>
+                                        </optgroup>
+                                        
+                                        <!-- Industria -->
+                                        <optgroup label="🏭 Industria y Manufactura">
+                                            <option value="industria_alimentos">Industria de Alimentos</option>
+                                            <option value="bebidas">Bebidas</option>
+                                            <option value="lacteos">Lácteos</option>
+                                            <option value="carnicos">Cárnicos</option>
+                                            <option value="panificacion">Panificación</option>
+                                            <option value="textil">Textil</option>
+                                            <option value="confeccion">Confección</option>
+                                            <option value="calzado">Calzado</option>
+                                            <option value="madera">Madera</option>
+                                            <option value="muebles">Muebles</option>
+                                            <option value="papel">Papel</option>
+                                            <option value="quimica">Industria Química</option>
+                                            <option value="farmaceutica">Farmacéutica</option>
+                                            <option value="cosmeticos">Cosméticos</option>
+                                            <option value="plasticos">Plásticos</option>
+                                            <option value="metalurgica">Metalúrgica</option>
+                                            <option value="automotriz">Automotriz</option>
+                                            <option value="electronica">Electrónica</option>
+                                            <option value="cemento">Cemento</option>
+                                            <option value="ceramica">Cerámica</option>
+                                            <option value="vidrio">Vidrio</option>
+                                            <option value="materiales_construccion">Materiales de Construcción</option>
+                                            <option value="envases_empaques">Envases y Empaques</option>
+                                        </optgroup>
+                                        
+                                        <!-- Comercio -->
+                                        <optgroup label="🛒 Comercio">
+                                            <option value="comercio_mayorista">Comercio al por Mayor</option>
+                                            <option value="comercio_menor">Comercio al por Menor</option>
+                                            <option value="abastos">Abastos</option>
+                                            <option value="supermercados">Supermercados</option>
+                                            <option value="farmacias">Farmacias</option>
+                                            <option value="ferreterias">Ferreterías</option>
+                                            <option value="repuestos">Repuestos</option>
+                                            <option value="ropa">Tiendas de Ropa</option>
+                                            <option value="zapatos">Zapaterías</option>
+                                            <option value="electrodomesticos">Electrodomésticos</option>
+                                            <option value="mueblerias">Mueblerías</option>
+                                            <option value="librerias">Librerías</option>
+                                            <option value="mascotas">Mascotas</option>
+                                            <option value="floristerias">Floristerías</option>
+                                        </optgroup>
+                                        
+                                        <!-- Servicios -->
+                                        <optgroup label="🔧 Servicios">
+                                            <option value="servicios_generales">Servicios Generales</option>
+                                            <option value="mantenimiento">Mantenimiento</option>
+                                            <option value="reparaciones">Reparaciones</option>
+                                            <option value="fontaneria">Fontanería</option>
+                                            <option value="electricidad">Electricidad</option>
+                                            <option value="carpinteria">Carpintería</option>
+                                            <option value="herreria">Herrería</option>
+                                            <option value="pintura">Pintura</option>
+                                            <option value="jardineria">Jardinería</option>
+                                            <option value="limpieza">Limpieza</option>
+                                            <option value="seguridad">Seguridad</option>
+                                            <option value="transporte">Transporte</option>
+                                            <option value="taxi">Taxi</option>
+                                            <option value="delivery">Delivery</option>
+                                            <option value="logistica">Logística</option>
+                                            <option value="talleres">Talleres</option>
+                                            <option value="mecanica">Mecánica Automotriz</option>
+                                            <option value="lavado_vehiculos">Lavado de Vehículos</option>
+                                            <option value="gasolinera">Gasolineras</option>
+                                            <option value="servicios_profesionales">Servicios Profesionales</option>
+                                            <option value="consultoria">Consultoría</option>
+                                            <option value="contabilidad">Contabilidad</option>
+                                            <option value="abogacia">Abogacía</option>
+                                            <option value="diseno">Diseño</option>
+                                            <option value="publicidad">Publicidad</option>
+                                            <option value="marketing">Marketing</option>
+                                            <option value="eventos">Eventos</option>
+                                            <option value="catering">Catering</option>
+                                            <option value="salon_belleza">Salones de Belleza</option>
+                                            <option value="barberias">Barberías</option>
+                                            <option value="spa">Spa</option>
+                                            <option value="lavanderia">Lavanderías</option>
+                                            <option value="tintoreria">Tintorerías</option>
+                                            <option value="costura">Costura</option>
+                                            <option value="fotografia">Fotografía</option>
+                                            <option value="copias">Copias</option>
+                                            <option value="ciber">Ciber</option>
+                                            <option value="recargas">Recargas</option>
+                                            <option value="pagos_servicios">Pago de Servicios</option>
+                                            <option value="inmobiliaria">Inmobiliaria</option>
+                                            <option value="alquileres">Alquileres</option>
+                                            <option value="viajes">Agencias de Viaje</option>
+                                            <option value="hoteles">Hoteles</option>
+                                            <option value="posadas">Posadas</option>
+                                            <option value="restaurantes">Restaurantes</option>
+                                            <option value="comida_rapida">Comida Rápida</option>
+                                            <option value="cafeterias">Cafeterías</option>
+                                            <option value="heladerias">Heladerías</option>
+                                            <option value="licorerias">Licorerías</option>
+                                            <option value="entretenimiento">Entretenimiento</option>
+                                            <option value="gimnasios">Gimnasios</option>
+                                            <option value="guarderias">Guarderías</option>
+                                            <option value="cuidado_ancianos">Cuidado de Ancianos</option>
+                                            <option value="enfermeria">Enfermería</option>
+                                            <option value="terapia">Terapia</option>
+                                            <option value="nutricion">Nutrición</option>
+                                        </optgroup>
+                                        
+                                        <!-- Tecnología -->
+                                        <optgroup label="💻 Tecnología">
+                                            <option value="tecnologia">Tecnología</option>
+                                            <option value="informatica">Informática</option>
+                                            <option value="software">Software</option>
+                                            <option value="desarrollo_web">Desarrollo Web</option>
+                                            <option value="desarrollo_apps">Desarrollo de Apps</option>
+                                            <option value="programacion">Programación</option>
+                                            <option value="diseno_web">Diseño Web</option>
+                                            <option value="diseno_grafico">Diseño Gráfico</option>
+                                            <option value="multimedia">Multimedia</option>
+                                            <option value="ciberseguridad">Ciberseguridad</option>
+                                            <option value="redes">Redes</option>
+                                            <option value="telecomunicaciones">Telecomunicaciones</option>
+                                            <option value="internet_proveedor">Proveedor de Internet</option>
+                                            <option value="camaras">Cámaras de Seguridad</option>
+                                            <option value="alarmas">Alarmas</option>
+                                            <option value="venta_computadoras">Venta de Computadoras</option>
+                                            <option value="venta_celulares">Venta de Celulares</option>
+                                            <option value="soporte_tecnico">Soporte Técnico</option>
+                                            <option value="hosting">Hosting</option>
+                                        </optgroup>
+                                        
+                                        <!-- Salud -->
+                                        <optgroup label="🏥 Salud">
+                                            <option value="salud">Salud</option>
+                                            <option value="medicina">Medicina</option>
+                                            <option value="clinicas">Clínicas</option>
+                                            <option value="consultorios">Consultorios</option>
+                                            <option value="laboratorios">Laboratorios Clínicos</option>
+                                            <option value="radiologia">Radiología</option>
+                                            <option value="odontologia">Odontología</option>
+                                            <option value="ortopedia">Ortopedia</option>
+                                            <option value="oftalmologia">Oftalmología</option>
+                                            <option value="psicologia">Psicología</option>
+                                            <option value="fisioterapia">Fisioterapia</option>
+                                            <option value="opticas">Ópticas</option>
+                                            <option value="equipos_medicos">Equipos Médicos</option>
+                                            <option value="farmacias_homeopatas">Farmacias Homeópatas</option>
+                                            <option value="medicina_natural">Medicina Natural</option>
+                                            <option value="suplementos">Suplementos</option>
+                                        </optgroup>
+                                        
+                                        <!-- Educación -->
+                                        <optgroup label="📚 Educación">
+                                            <option value="educacion">Educación</option>
+                                            <option value="escuelas">Escuelas</option>
+                                            <option value="colegios">Colegios</option>
+                                            <option value="universidades">Universidades</option>
+                                            <option value="institutos">Institutos</option>
+                                            <option value="academias">Academias</option>
+                                            <option value="cursos">Cursos</option>
+                                            <option value="talleres">Talleres Educativos</option>
+                                            <option value="idiomas">Idiomas</option>
+                                            <option value="ingles">Inglés</option>
+                                            <option value="formacion">Formación</option>
+                                            <option value="coaching">Coaching</option>
+                                            <option value="tutorias">Tutorías</option>
+                                            <option value="investigacion">Investigación</option>
+                                            <option value="e_learning">E-Learning</option>
+                                            <option value="educacion_virtual">Educación Virtual</option>
+                                        </optgroup>
+                                        
+                                        <!-- Construcción -->
+                                        <optgroup label="🏗️ Construcción">
+                                            <option value="construccion">Construcción</option>
+                                            <option value="edificaciones">Edificaciones</option>
+                                            <option value="viviendas">Viviendas</option>
+                                            <option value="remodelaciones">Remodelaciones</option>
+                                            <option value="reparaciones_locativas">Reparaciones Locativas</option>
+                                            <option value="pintura_construccion">Pintura</option>
+                                            <option value="impermeabilizacion">Impermeabilización</option>
+                                            <option value="techado">Techado</option>
+                                            <option value="drywall">Drywall</option>
+                                            <option value="pisos">Pisos</option>
+                                            <option value="ceramicos">Cerámicos</option>
+                                            <option value="granito">Granito</option>
+                                            <option value="marmol">Mármol</option>
+                                            <option value="aluminio">Aluminio</option>
+                                            <option value="vidrios">Vidrios</option>
+                                            <option value="puertas">Puertas</option>
+                                            <option value="ventanas">Ventanas</option>
+                                            <option value="cocinas">Cocinas</option>
+                                            <option value="closets">Closets</option>
+                                            <option value="banos">Baños</option>
+                                            <option value="piscinas">Piscinas</option>
+                                            <option value="jardineria_construccion">Jardinería</option>
+                                            <option value="paisajismo">Paisajismo</option>
+                                            <option value="electricidad_construccion">Electricidad</option>
+                                            <option value="plomeria">Plomería</option>
+                                            <option value="gas">Gas</option>
+                                            <option value="aire_acondicionado">Aire Acondicionado</option>
+                                        </optgroup>
+                                        
+                                        <!-- Minería y Energía -->
+                                        <optgroup label="⛏️ Minería y Energía">
+                                            <option value="mineria">Minería</option>
+                                            <option value="oro">Oro</option>
+                                            <option value="hierro">Hierro</option>
+                                            <option value="bauxita">Bauxita</option>
+                                            <option value="carbon">Carbón</option>
+                                            <option value="petroleo">Petróleo</option>
+                                            <option value="gas">Gas Natural</option>
+                                            <option value="energia">Energía</option>
+                                            <option value="energia_solar">Energía Solar</option>
+                                            <option value="paneles_solares">Paneles Solares</option>
+                                            <option value="energia_eolica">Energía Eólica</option>
+                                            <option value="generadores">Generadores</option>
+                                            <option value="plantas_electricas">Plantas Eléctricas</option>
+                                        </optgroup>
+                                        
+                                        <!-- Artesanía -->
+                                        <optgroup label="🎨 Artesanía y Cultura">
+                                            <option value="artesanias">Artesanías</option>
+                                            <option value="manualidades">Manualidades</option>
+                                            <option value="pintura_arte">Pintura</option>
+                                            <option value="escultura">Escultura</option>
+                                            <option value="ceramica_arte">Cerámica Artística</option>
+                                            <option value="tejido">Tejido</option>
+                                            <option value="bordado">Bordado</option>
+                                            <option value="bisuteria">Bisutería</option>
+                                            <option value="joyeria">Joyería</option>
+                                            <option value="orfebreria">Orfebrería</option>
+                                            <option value "cuero_artesania">Cuero</option>
+                                            <option value="madera_artesania">Madera Artesanal</option>
+                                            <option value="musica">Música</option>
+                                            <option value="instrumentos">Instrumentos Musicales</option>
+                                            <option value="produccion_musical">Producción Musical</option>
+                                            <option value="eventos_culturales">Eventos Culturales</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fechaInicio"><i class="fas fa-calendar-alt"></i> Fecha de Inicio de Operaciones</label>
+                                    <input type="date" id="fechaInicio" name="fechaInicio" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-label"><i class="fas fa-users"></i> Capital Humano & Ubicación</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="empleadosDirectos"><i class="fas fa-user-tie"></i> Empleados Directos</label>
+                                    <input type="number" id="empleadosDirectos" name="empleadosDirectos" min="0" placeholder="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="empleadosIndirectos"><i class="fas fa-users"></i> Empleados Indirectos</label>
+                                    <input type="number" id="empleadosIndirectos" name="empleadosIndirectos" min="0" placeholder="0" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                                <input type="text" id="direccion" name="direccion" placeholder="Dirección completa del establecimiento..." required>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-label"><i class="fas fa-address-book"></i> Contacto</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                                    <input type="tel" id="telefono" name="telefono" placeholder="0414-0000000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-label"><i class="fas fa-balance-scale"></i> Condición Legal</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="condicionActual"><i class="fas fa-clipboard-check"></i> Condición Actual</label>
+                                    <select id="condicionActual" name="condicionActual" required>
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="formal">Formal</option>
+                                        <option value="informal">Informal</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="figuraJuridica"><i class="fas fa-balance-scale"></i> Figura Jurídica</label>
+                                    <select id="figuraJuridica" name="figuraJuridica" required>
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="persona_natural">Persona Natural</option>
+                                        <option value="persona_juridica">Persona Jurídica</option>
+                                        <option value="comunidad">Comunidad</option>
+                                        <option value="cooperativa">Cooperativa</option>
+                                        <option value="asociacion">Asociación Civil</option>
+                                        <option value="empresa_mercantil">Empresa Mercantil</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section" style="margin-bottom:0">
+                            <div class="form-section-label"><i class="fas fa-file-alt"></i> Descripción & Requerimientos</div>
+                            <div class="form-group">
+                                <label for="descripcionEmpresa"><i class="fas fa-info-circle"></i> Descripción del Emprendimiento</label>
+                                <textarea id="descripcionEmpresa" name="descripcionEmpresa" placeholder="Describa brevemente la actividad económica..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="requerimientos"><i class="fas fa-clipboard-list"></i> Requerimientos</label>
+                                <textarea id="requerimientos" name="requerimientos" placeholder="Indique los requerimientos o necesidades del emprendimiento..." required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="reset" class="btn btn-muted">
+                                <i class="fas fa-undo"></i> Limpiar
+                            </button>
+                            <button type="submit" class="btn btn-accent" id="submitBtn">
+                                <i class="fas fa-save"></i> Guardar Registro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-inner">
+                <div class="footer-text">
+                    <p>Secretaría Ejecutiva Desarrollo Económico — Emprendedores</p>
+                    <p>© 2026 Todos los derechos reservados</p>
+                </div>
+                <div class="footer-right">
+                    <a href="ver-registros-v2.html" class="admin-link" target="_blank">
+                        <i class="fas fa-table"></i> Ver Registros
+                    </a>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyqvQ8nrc3vRjYc6zXysnPR4A-dOyS7hw",
+            authDomain: "desarrollo-689ec.firebaseapp.com",
+            projectId: "desarrollo-689ec",
+            storageBucket: "desarrollo-689ec.firebasestorage.app",
+            messagingSenderId: "845949553800",
+            appId: "1:845949553800:web:7c6c6813b101fe538ca33d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Escuchar cambios de autenticación
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('loginContainer').classList.add('hidden');
+                document.getElementById('formContainer').classList.remove('hidden');
+                showNotification('✓ Sesión iniciada');
+                updateStats();
+            } else {
+                document.getElementById('loginContainer').classList.remove('hidden');
+                document.getElementById('formContainer').classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('mainContainer').classList.add('loaded'), 100);
+            updateStats();
+        });
+
+        function showNotification(message, isError = false) {
+            const n = document.getElementById('notification');
+            n.textContent = message;
+            n.className = 'notification' + (isError ? ' error' : '');
+            n.style.display = 'block';
+            setTimeout(() => { n.style.display = 'none'; }, 3500);
+        }
+
+        // Manejar login con Firebase Auth
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('accessPassword').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showNotification('✓ Autenticación exitosa');
+            } catch (error) {
+                console.error('Error de autenticación:', error);
+                let errorMsg = 'Credenciales incorrectas';
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'Usuario no registrado';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg = 'Contraseña incorrecta';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'Correo inválido';
+                }
+                showNotification(errorMsg, true);
+            }
+        });
+
+        // Función para cerrar sesión
+        function logout() {
+            auth.signOut().then(() => {
+                showNotification('Sesión cerrada');
+                document.getElementById('email').value = '';
+                document.getElementById('accessPassword').value = '';
+            });
+        }
+
+        async function updateStats() {
+            try {
+                const snapshot = await db.collection('empresas').get();
+                let totalEmpleados = 0;
+                const dirs = new Set();
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    totalEmpleados += (d.empleadosDirectos || 0) + (d.empleadosIndirectos || 0);
+                    if (d.direccion) dirs.add(d.direccion);
+                });
+                animateNumber('totalEmpresas', snapshot.size);
+                animateNumber('totalEmpleados', totalEmpleados);
+                animateNumber('totalMunicipios', dirs.size);
+            } catch (e) { console.error(e); }
+        }
+
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            const start = parseInt(el.textContent) || 0;
+            const duration = 900;
+            let startTime;
+            const step = (ts) => {
+                if (!startTime) startTime = ts;
+                const progress = Math.min((ts - startTime) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(start + (target - start) * ease);
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        document.getElementById('empresaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+            const formData = {
+                descripcionEmpresa: document.getElementById('descripcionEmpresa').value,
+                nombreEmpresa: document.getElementById('nombreEmpresa').value,
+                rifCedula: document.getElementById('rifCedula').value,
+                sector: document.getElementById('sector').value,
+                empleadosDirectos: parseInt(document.getElementById('empleadosDirectos').value),
+                empleadosIndirectos: parseInt(document.getElementById('empleadosIndirectos').value),
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                correo: document.getElementById('correo').value,
+                condicionActual: document.getElementById('condicionActual').value,
+                figuraJuridica: document.getElementById('figuraJuridica').value,
+                requerimientos: document.getElementById('requerimientos').value,
+                fechaInicio: document.getElementById('fechaInicio').value,
+                fechaRegistro: new Date()
+            };
+            try {
+                await db.collection('empresas').add(formData);
+                showNotification('✓ Registro guardado correctamente');
+                document.getElementById('empresaForm').reset();
+                updateStats();
+            } catch (error) {
+                showNotification('Error al guardar los datos', true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Guardar Registro';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Registros - Desarrollo Económico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --granate: #56070c;
+            --granate-dark: #3a0408;
+            --granate-light: #7a0a12;
+            --dorado: #FFD700;
+            --dorado-dark: #e6c200;
+            --rojo: #EF4135;
+            --rojo-dark: #CC0000;
+            --blanco: #ffffff;
+            --gris-claro: #f5f3f0;
+            --gris-medio: #e8e3dc;
+            --texto: #1a0305;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, rgba(120, 20, 40, 0.75) 0%, rgba(80, 10, 20, 0.75) 100%), url('gobernador.jpg?v=2');
+            background-size: 100% 100%;
+            background-position: 95% center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 35vh auto 0;
+            background: var(--blanco);
+            border-radius: 4px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 12s ease, transform 12s ease;
+        }
+
+        .container.loaded { opacity: 1; transform: translateY(0); }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--granate) 0%, var(--granate-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-top-bar { background: var(--dorado); height: 5px; position: relative; z-index: 3; }
+        .header-inner { padding: 25px 35px 35px; position: relative; z-index: 3; }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; right: 0;
+            height: 40px;
+            background: var(--blanco);
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+
+        .header-pattern {
+            position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 10% 50%, rgba(255,215,0,0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 30%, rgba(239,65,53,0.1) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .logo-row { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+
+        .logo {
+            width: 110px; height: 110px;
+            border-radius: 50%; border: 3px solid var(--dorado); object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 0 6px rgba(255,215,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .header-title-block { flex: 1; text-align: center; }
+
+        .header-eyebrow {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--dorado); opacity: 0.8; margin-bottom: 10px;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; font-weight: 900; color: var(--blanco);
+            line-height: 1.15; text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+
+        .title span { display: block; color: var(--dorado); font-size: 2.6rem; }
+
+        /* CONTENT */
+        .content { padding: 30px 35px; }
+
+        /* LOGIN */
+        .login-container { display: flex; justify-content: center; }
+
+        .login-card {
+            background: var(--gris-claro); border: 1px solid var(--gris-medio);
+            border-radius: 16px; padding: 45px 50px; width: 100%; max-width: 480px;
+            position: relative; overflow: hidden;
+        }
+
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(to right, var(--granate), var(--dorado), var(--rojo));
+        }
+
+        .login-icon {
+            width: 64px; height: 64px; background: var(--granate); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 25px; color: var(--dorado); font-size: 1.6rem;
+            box-shadow: 0 8px 20px rgba(86,7,12,0.3);
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            color: var(--granate); font-weight: 700; text-align: center; margin-bottom: 8px;
+        }
+
+        .login-sub { text-align: center; color: #999; font-size: 0.85rem; margin-bottom: 35px; }
+
+        .form-group { margin-bottom: 22px; }
+
+        label {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+            color: var(--granate); font-weight: 600; font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        label i { color: var(--rojo); font-size: 0.85rem; }
+
+        input {
+            width: 100%; padding: 13px 16px;
+            border: 1.5px solid var(--gris-medio); border-radius: 10px;
+            font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease; background: var(--blanco); color: var(--texto);
+        }
+
+        input:focus { outline: none; border-color: var(--granate); box-shadow: 0 0 0 3px rgba(86,7,12,0.1); }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 28px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 0.85rem; font-weight: 600; font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 0.8px;
+        }
+
+        .btn-primary { background: var(--granate); color: var(--blanco); box-shadow: 0 4px 15px rgba(86,7,12,0.3); }
+        .btn-primary:hover { background: var(--granate-light); transform: translateY(-2px); }
+
+        .btn-accent { background: var(--rojo); color: var(--blanco); box-shadow: 0 4px 15px rgba(239,65,53,0.3); }
+        .btn-accent:hover { background: var(--rojo-dark); transform: translateY(-2px); }
+
+        .btn-green { background: #2d8a4e; color: var(--blanco); box-shadow: 0 4px 12px rgba(45,138,78,0.3); }
+        .btn-green:hover { background: #256b3e; transform: translateY(-2px); }
+
+        .btn-muted { background: #888; color: var(--blanco); }
+        .btn-muted:hover { background: #666; transform: translateY(-2px); }
+
+        /* RECORDS SECTION */
+        .records-container { display: none; }
+
+        .records-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title-block {
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .section-icon {
+            width: 48px; height: 48px; background: var(--granate);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            color: var(--dorado); font-size: 1.2rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; color: var(--granate); font-weight: 700;
+        }
+
+        .section-title small {
+            display: block; font-family: 'Inter', sans-serif;
+            font-size: 0.78rem; font-weight: 400; color: #999;
+            margin-top: 2px; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        /* LAYOUT */
+        .records-layout { display: flex; gap: 24px; }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px; flex-shrink: 0;
+            background: var(--granate);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            display: flex; flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px 22px 15px;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+        }
+
+        .sidebar-title {
+            color: var(--dorado); font-size: 0.75rem;
+            font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .sidebar-count {
+            margin-top: 6px; color: rgba(255,255,255,0.5); font-size: 0.8rem;
+        }
+
+        .empresa-list {
+            list-style: none; overflow-y: auto; flex: 1; padding: 12px;
+        }
+
+        .empresa-list::-webkit-scrollbar { width: 4px; }
+        .empresa-list::-webkit-scrollbar-track { background: transparent; }
+        .empresa-list::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.3); border-radius: 4px; }
+
+        .empresa-item {
+            padding: 12px 14px; margin-bottom: 6px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease;
+            color: rgba(255,255,255,0.8); font-size: 0.88rem;
+            border-left: 3px solid transparent;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .empresa-item:hover { background: rgba(255,255,255,0.12); color: white; border-left-color: rgba(255,215,0,0.5); }
+
+        .empresa-item.active {
+            background: rgba(255,215,0,0.18); color: white;
+            border-left-color: var(--dorado); font-weight: 600;
+        }
+
+        .empresa-item i { color: var(--dorado); font-size: 0.8rem; flex-shrink: 0; }
+
+        /* FICHAS */
+        .fichas-container { flex: 1; max-height: 72vh; overflow-y: auto; }
+
+        .fichas-container::-webkit-scrollbar { width: 5px; }
+        .fichas-container::-webkit-scrollbar-track { background: var(--gris-claro); }
+        .fichas-container::-webkit-scrollbar-thumb { background: var(--granate); border-radius: 4px; }
+
+        .ficha {
+            background: var(--blanco); border-radius: 14px;
+            border: 1px solid var(--gris-medio);
+            overflow: hidden; display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .ficha.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ficha-header {
+            background: var(--granate);
+            padding: 22px 28px;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 15px;
+        }
+
+        .ficha-header-left {}
+
+        .ficha-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--blanco); font-size: 1.35rem; font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .ficha-rif {
+            color: var(--dorado); font-size: 0.85rem; font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .ficha-actions { display: flex; gap: 10px; align-items: center; }
+
+        .btn-print-small {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15); color: var(--blanco);
+            border: 1px solid rgba(255,255,255,0.3); padding: 8px 14px;
+            border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+            transition: all 0.2s ease; font-family: 'Inter', sans-serif;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .btn-print-small:hover { background: rgba(255,255,255,0.25); border-color: white; }
+
+        .delete-btn {
+            width: 36px; height: 36px; background: rgba(239,65,53,0.2);
+            border: 1px solid rgba(239,65,53,0.4); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            color: #ff8a82; cursor: pointer; transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover { background: var(--rojo); color: white; border-color: var(--rojo); }
+
+        .ficha-body {
+            padding: 24px 28px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+        }
+
+        .ficha-field {
+            background: var(--gris-claro);
+            border: 1px solid var(--gris-medio);
+            border-left: 3px solid var(--granate);
+            padding: 12px 14px; border-radius: 8px;
+        }
+
+        .ficha-field.ficha-full { grid-column: 1 / -1; }
+        .ficha-field.ficha-half { grid-column: span 2; }
+
+        .ficha-label {
+            color: var(--granate); font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .ficha-label i { color: var(--rojo); }
+
+        .ficha-value { color: var(--texto); font-size: 0.92rem; font-weight: 500; }
+
+        /* NO RECORDS */
+        .no-records {
+            text-align: center; padding: 60px 40px; color: var(--granate);
+        }
+
+        .no-records i { font-size: 3.5rem; color: var(--dorado); margin-bottom: 20px; display: block; }
+        .no-records p { font-size: 1rem; color: #999; }
+
+        /* FOOTER */
+        .footer { background: var(--granate); padding: 35px 50px; position: relative; }
+
+        .footer::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(to right, var(--dorado), var(--rojo), var(--dorado));
+        }
+
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+
+        .footer-text p { color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.8; }
+        .footer-text p:first-child { color: var(--blanco); font-weight: 600; font-size: 0.9rem; }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); color: var(--dorado);
+            padding: 10px 20px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.85rem;
+            transition: all 0.25s ease; border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .back-link:hover { background: rgba(255,215,0,0.15); border-color: var(--dorado); }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed; top: 25px; right: 25px;
+            padding: 14px 22px; background: var(--granate); color: white;
+            border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: none; z-index: 9999; font-size: 0.9rem; font-weight: 500;
+            border-left: 4px solid var(--dorado);
+        }
+
+        .notification.error { background: var(--rojo-dark); }
+
+        /* DELETE MODAL */
+        .delete-modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--blanco); padding: 40px 45px; border-radius: 16px;
+            text-align: center; max-width: 420px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border-top: 4px solid var(--rojo);
+        }
+
+        .modal-icon {
+            width: 56px; height: 56px; background: rgba(239,65,53,0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; color: var(--rojo); font-size: 1.4rem;
+        }
+
+        .modal-content h3 {
+            font-family: 'Playfair Display', serif; color: var(--granate);
+            font-size: 1.35rem; margin-bottom: 10px;
+        }
+
+        .modal-content p { color: #777; font-size: 0.9rem; margin-bottom: 30px; }
+
+        .modal-buttons { display: flex; justify-content: center; gap: 12px; }
+
+        .hidden { display: none !important; }
+
+        /* PRINT */
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; }
+            .header, .footer, .sidebar, .ficha-actions, .records-header, .btn, .delete-btn { display: none !important; }
+            .records-container { display: block !important; padding: 20px; }
+            .records-layout { display: block; }
+            .fichas-container { max-height: none; overflow: visible; }
+            .ficha { display: block !important; page-break-inside: avoid; margin-bottom: 30px; }
+            .ficha-header { background: var(--granate) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .ficha-body { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .records-layout { flex-direction: column; }
+            .sidebar { width: 100%; max-height: 220px; }
+            .fichas-container { max-height: none; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            .header-inner { padding: 25px 20px 40px; }
+            .logo { width: 75px; height: 75px; }
+            .title { font-size: 1.4rem; }
+            .title span { font-size: 1.8rem; }
+            .content { padding: 25px 20px; }
+            .ficha-body { grid-template-columns: 1fr 1fr; }
+            .login-card { padding: 30px 25px; }
+            .footer { padding: 25px 20px; }
+            .footer-inner { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+
+        <div class="header">
+            <div class="header-top-bar"></div>
+            <div class="header-pattern"></div>
+            <div class="header-inner">
+                <div class="logo-row">
+                    <img src="logo 1.jpg" alt="Logo Institucional" class="logo">
+                    <div class="header-title-block">
+                        <div class="header-eyebrow">República Bolivariana de Venezuela</div>
+                        <h1 class="title">
+                            Secretaría Ejecutiva
+                            <span>Desarrollo Económico</span>
+                        </h1>
+                    </div>
+                    <img src="logo 2.jpg" alt="Logo Secundario" class="logo">
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div class="login-container" id="loginContainer">
+                <div class="login-card">
+                    <div class="login-icon"><i class="fas fa-table"></i></div>
+                    <h3 class="login-title">Panel de Registros</h3>
+                    <p class="login-sub">Ingrese sus credenciales para acceder</p>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                            <input type="email" id="email" name="email" placeholder="admin@desarrollo.gob.ve" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock"></i> Contraseña de Acceso</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-accent" style="width:100%; margin-top:10px;">
+                            <i class="fas fa-sign-in-alt"></i> Ingresar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="records-container" id="recordsContainer">
+                <div class="records-header">
+                    <div class="section-title-block">
+                        <div class="section-icon"><i class="fas fa-database"></i></div>
+                        <div class="section-title">
+                            Base de Emprendimientos
+                            <small>Registros activos en sistema</small>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-muted" onclick="logout()" style="margin-right: 10px;">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                        <button class="btn btn-green" id="printBtn">
+                            <i class="fas fa-print"></i> Imprimir / PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="records-layout">
+                    <div class="sidebar">
+                        <div class="sidebar-header">
+                            <div class="sidebar-title"><i class="fas fa-list-ul"></i> Emprendimientos</div>
+                            <div class="sidebar-count" id="sidebarCount">Cargando...</div>
+                        </div>
+                        <ul class="empresa-list" id="empresaList"></ul>
+                    </div>
+
+                    <div class="fichas-container" id="fichasContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="delete-modal" id="deleteModal">
+            <div class="modal-content">
+                <div class="modal-icon"><i class="fas fa-trash-alt"></i></div>
+                <h3>Confirmar Eliminación</h3>
+                <p>¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer.</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-muted" id="cancelDelete"><i class="fas fa-times"></i> Cancelar</button>
+                    <button class="btn btn-accent" id="confirmDelete"><i class="fas fa-trash"></i> Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-inner">
+                <div class="footer-text">
+                    <p>Secretaría Ejecutiva Desarrollo Económico — Emprendedores</p>
+                    <p>© 2026 Todos los derechos reservados</p>
+                </div>
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Volver al Registro
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyqvQ8nrc3vRjYc6zXysnPR4A-dOyS7hw",
+            authDomain: "desarrollo-689ec.firebaseapp.com",
+            projectId: "desarrollo-689ec",
+            storageBucket: "desarrollo-689ec.firebasestorage.app",
+            messagingSenderId: "845949553800",
+            appId: "1:845949553800:web:7c6c6813b101fe538ca33d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        let currentDocId = null;
+        let allRecords = [];
+        let esAdministrador = false;
+
+        // Escuchar cambios de autenticación
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('loginContainer').classList.add('hidden');
+                document.getElementById('recordsContainer').style.display = 'block';
+                showNotification('✓ Sesión iniciada');
+                
+                // Verificar si es administrador por email
+                const adminEmail = 'desaeco@barinas.local';
+                esAdministrador = (user.email === adminEmail);
+                
+                console.log(esAdministrador ? "Modo Editor Activado" : "Modo Solo Lectura");
+                
+                // Configurar interfaz según el rol
+                if (esAdministrador) {
+                    configurarInterfazAdmin();
+                } else {
+                    configurarInterfazUsuario();
+                }
+                
+                loadRecords();
+            } else {
+                document.getElementById('loginContainer').classList.remove('hidden');
+                document.getElementById('recordsContainer').style.display = 'none';
+            }
+        });
+
+        function configurarInterfazUsuario() {
+            // Ocultar botones de edición/eliminación
+            const botonesEdicion = document.querySelectorAll('.delete-btn, .btn-editar, #printBtn');
+            botonesEdicion.forEach(elemento => {
+                elemento.style.display = 'none';
+            });
+            console.log("Modo: Consulta Protegida");
+        }
+
+        function configurarInterfazAdmin() {
+            // Administrador ve todo
+            console.log("Modo: Administrador (Control Total)");
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('mainContainer').classList.add('loaded'), 100);
+        });
+
+        function showNotification(message, isError = false) {
+            const n = document.getElementById('notification');
+            n.textContent = message;
+            n.className = 'notification' + (isError ? ' error' : '');
+            n.style.display = 'block';
+            setTimeout(() => { n.style.display = 'none'; }, 3500);
+        }
+
+        // Manejar login con Firebase Auth
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showNotification('✓ Autenticación exitosa');
+            } catch (error) {
+                console.error('Error de autenticación:', error);
+                let errorMsg = 'Credenciales incorrectas';
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'Usuario no registrado';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg = 'Contraseña incorrecta';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'Correo inválido';
+                }
+                showNotification(errorMsg, true);
+            }
+        });
+
+        // Función para cerrar sesión
+        function logout() {
+            auth.signOut().then(() => {
+                showNotification('Sesión cerrada');
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+            });
+        }
+
+        function formatDate(str) {
+            if (!str) return 'N/A';
+            const d = new Date(str);
+            return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function capitalize(str) {
+            if (!str) return 'N/A';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function formatFigura(str) {
+            if (!str) return 'N/A';
+            return str.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
+        async function loadRecords() {
+            try {
+                const snapshot = await db.collection('empresas').get();
+                allRecords = [];
+                const empresaList = document.getElementById('empresaList');
+                const fichasContainer = document.getElementById('fichasContainer');
+                empresaList.innerHTML = '';
+                fichasContainer.innerHTML = '';
+
+                if (snapshot.empty) {
+                    fichasContainer.innerHTML = `
+                        <div class="no-records">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No hay registros disponibles</p>
+                        </div>`;
+                    document.getElementById('sidebarCount').textContent = '0 registros';
+                } else {
+                    document.getElementById('sidebarCount').textContent = snapshot.size + ' registros';
+
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        allRecords.push({ id: doc.id, data });
+
+                        const li = document.createElement('li');
+                        li.className = 'empresa-item';
+                        li.setAttribute('data-id', doc.id);
+                        li.innerHTML = `<i class="fas fa-store"></i> ${data.nombreEmpresa}`;
+                        li.addEventListener('click', () => showFicha(doc.id));
+                        empresaList.appendChild(li);
+
+                        const ficha = document.createElement('div');
+                        ficha.className = 'ficha';
+                        ficha.id = `ficha-${doc.id}`;
+                        ficha.innerHTML = `
+                            <div class="ficha-header">
+                                <div class="ficha-header-left">
+                                    <div class="ficha-title">${data.nombreEmpresa}</div>
+                                    <div class="ficha-rif"><i class="fas fa-id-card"></i> RIF/Cédula: ${data.rifCedula || 'N/A'}</div>
+                                </div>
+                                <div class="ficha-actions">
+                                    <button class="btn-print-small" onclick="printFicha('${doc.id}')">
+                                        <i class="fas fa-print"></i> Imprimir
+                                    </button>
+                                    <div class="delete-btn" data-id="${doc.id}" title="Eliminar registro">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ficha-body">
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-industry"></i> Sector Económico</div>
+                                    <div class="ficha-value">${capitalize(data.sector)}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-clipboard-check"></i> Condición Actual</div>
+                                    <div class="ficha-value">${capitalize(data.condicionActual)}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-balance-scale"></i> Figura Jurídica</div>
+                                    <div class="ficha-value">${formatFigura(data.figuraJuridica)}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-calendar-alt"></i> Fecha de Inicio</div>
+                                    <div class="ficha-value">${formatDate(data.fechaInicio)}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-user-tie"></i> Empleados Directos</div>
+                                    <div class="ficha-value">${data.empleadosDirectos || 0}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-users"></i> Empleados Indirectos</div>
+                                    <div class="ficha-value">${data.empleadosIndirectos || 0}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-phone"></i> Teléfono</div>
+                                    <div class="ficha-value">${data.telefono || 'N/A'}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-envelope"></i> Correo Electrónico</div>
+                                    <div class="ficha-value">${data.correo || 'N/A'}</div>
+                                </div>
+                                <div class="ficha-field">
+                                    <div class="ficha-label"><i class="fas fa-calendar"></i> Fecha de Registro</div>
+                                    <div class="ficha-value">${data.fechaRegistro ? data.fechaRegistro.toDate().toLocaleDateString('es-ES') : 'N/A'}</div>
+                                </div>
+                                <div class="ficha-field ficha-full">
+                                    <div class="ficha-label"><i class="fas fa-map-marker-alt"></i> Dirección</div>
+                                    <div class="ficha-value">${data.direccion || 'N/A'}</div>
+                                </div>
+                                <div class="ficha-field ficha-full">
+                                    <div class="ficha-label"><i class="fas fa-info-circle"></i> Descripción del Emprendimiento</div>
+                                    <div class="ficha-value">${data.descripcionEmpresa || 'N/A'}</div>
+                                </div>
+                                <div class="ficha-field ficha-full">
+                                    <div class="ficha-label"><i class="fas fa-clipboard-list"></i> Requerimientos</div>
+                                    <div class="ficha-value">${data.requerimientos || 'N/A'}</div>
+                                </div>
+                            </div>
+                        `;
+                        fichasContainer.appendChild(ficha);
+                    });
+
+                    if (allRecords.length > 0) showFicha(allRecords[0].id);
+
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            currentDocId = this.getAttribute('data-id');
+                            document.getElementById('deleteModal').style.display = 'flex';
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                showNotification('Error al cargar los registros', true);
+            }
+        }
+
+        function showFicha(docId) {
+            document.querySelectorAll('.ficha').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.empresa-item').forEach(i => i.classList.remove('active'));
+            const ficha = document.getElementById(`ficha-${docId}`);
+            if (ficha) ficha.classList.add('active');
+            const item = document.querySelector(`.empresa-item[data-id="${docId}"]`);
+            if (item) item.classList.add('active');
+        }
+
+        function printFicha(docId) {
+            document.querySelectorAll('.ficha').forEach(f => {
+                f.style.display = f.id !== `ficha-${docId}` ? 'none' : 'block';
+            });
+            window.print();
+            setTimeout(() => {
+                document.querySelectorAll('.ficha').forEach(f => {
+                    f.style.display = f.classList.contains('active') ? 'block' : 'none';
+                });
+            }, 1000);
+        }
+
+        async function deleteRecord() {
+            if (!currentDocId) return;
+            
+            // Verificar si es administrador
+            if (!esAdministrador) {
+                showNotification('❌ No tiene permisos para eliminar registros', true);
+                document.getElementById('deleteModal').style.display = 'none';
+                currentDocId = null;
+                return;
+            }
+            
+            try {
+                await db.collection('empresas').doc(currentDocId).delete();
+                showNotification('✓ Registro eliminado correctamente');
+                document.getElementById('deleteModal').style.display = 'none';
+                loadRecords();
+            } catch (error) {
+                showNotification('Error al eliminar el registro', true);
+            }
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', deleteRecord);
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDocId = null;
+        });
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) { this.style.display = 'none'; currentDocId = null; }
+        });
+        document.getElementById('printBtn').addEventListener('click', () => {
+            document.querySelectorAll('.ficha').forEach(f => f.style.display = 'block');
+            window.print();
+            setTimeout(() => {
+                document.querySelectorAll('.ficha').forEach(f => {
+                    f.style.display = f.classList.contains('active') ? 'block' : 'none';
+                });
+            }, 1000);
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { document.getElementById('deleteModal').style.display = 'none'; currentDocId = null; }
+        });
+    </script>
+</body>
+</html>
