@@ -931,13 +931,23 @@
         // Manejar login con Firebase Auth
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('accessPassword').value;
-            
+
             try {
-                await auth.signInWithEmailAndPassword(email, password);
-                showNotification('✓ Autenticación exitosa');
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // BLOQUEO DE SEGURIDAD: Solo tu correo entra aquí
+                if (user.email === 'desaeco@barinas.local') {
+                    showNotification('✓ Bienvenido Administrador');
+                } else {
+                    alert('Acceso Denegado: Esta área es solo para el Administrador.');
+                    auth.signOut(); // Lo desconectamos de inmediato
+                    window.location.href = 'ver-registros-v2.html'; // Lo mandamos a la consulta
+                    return;
+                }
             } catch (error) {
                 console.error('Error de autenticación:', error);
                 let errorMsg = 'Credenciales incorrectas';

@@ -911,20 +911,18 @@
                 document.getElementById('loginContainer').classList.add('hidden');
                 document.getElementById('recordsContainer').style.display = 'block';
                 showNotification('✓ Sesión iniciada');
-                
+
                 // Verificar si es administrador por email
                 const adminEmail = 'desaeco@barinas.local';
                 esAdministrador = (user.email === adminEmail);
-                
-                console.log(esAdministrador ? "Modo Editor Activado" : "Modo Solo Lectura");
-                
+
                 // Configurar interfaz según el rol
                 if (esAdministrador) {
                     configurarInterfazAdmin();
                 } else {
                     configurarInterfazUsuario();
                 }
-                
+
                 loadRecords();
             } else {
                 document.getElementById('loginContainer').classList.remove('hidden');
@@ -933,17 +931,18 @@
         });
 
         function configurarInterfazUsuario() {
-            // Ocultar botones de edición/eliminación
-            const botonesEdicion = document.querySelectorAll('.delete-btn, .btn-editar, #printBtn');
+            // Ocultar botones de edición/eliminación - Modo solo lectura
+            const botonesEdicion = document.querySelectorAll('.delete-btn, .btn-editar');
             botonesEdicion.forEach(elemento => {
                 elemento.style.display = 'none';
             });
-            console.log("Modo: Consulta Protegida");
+            alert('Modo de solo lectura activado.');
+            console.log('Modo: Consulta Protegida');
         }
 
         function configurarInterfazAdmin() {
             // Administrador ve todo
-            console.log("Modo: Administrador (Control Total)");
+            console.log('Modo: Administrador (Control Total)');
         }
 
         window.addEventListener('load', () => {
