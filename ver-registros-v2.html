@@ -36,7 +36,7 @@
         .container {
             width: 100%;
             max-width: 950px;
-            margin: 20vh auto 0;
+            margin: 50vh auto 0;
             background: var(--blanco);
             border-radius: 8px;
             box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.3);
@@ -97,7 +97,13 @@
             line-height: 1.15; text-shadow: 0 2px 15px rgba(0,0,0,0.3);
         }
 
-        .title span { display: block; color: var(--dorado); font-size: 2.6rem; }
+        .title span { 
+            display: block; 
+            color: #cc9900; 
+            font-size: 2.6rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px rgba(204,153,0,0.3);
+            letter-spacing: 1px;
+        }
 
         /* CONTENT */
         .content { padding: 30px 35px; }
@@ -416,15 +422,193 @@
 
         /* PRINT */
         @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; border: none; }
-            .header, .footer, .sidebar, .ficha-actions, .records-header, .btn, .delete-btn { display: none !important; }
-            .records-container { display: block !important; padding: 20px; }
-            .records-layout { display: block; }
-            .fichas-container { max-height: none; overflow: visible; }
-            .ficha { display: block !important; page-break-inside: avoid; margin-bottom: 30px; }
-            .ficha-header { background: var(--granate) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .ficha-body { grid-template-columns: repeat(3, 1fr); }
+            * {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            body { 
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            
+            .container { 
+                box-shadow: none !important; 
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: none !important;
+            }
+            
+            .header { 
+                display: block !important;
+                background: var(--granate) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin: 0 !important;
+                padding: 10px 15px !important;
+                width: 100% !important;
+                position: relative !important;
+                top: 0 !important;
+            }
+            
+            .header-pattern,
+            .header-top-bar,
+            .header::after { 
+                display: none !important; 
+            }
+            
+            .logo-row { 
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 10px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .logo { 
+                width: 45px !important;
+                height: 45px !important;
+                margin: 0 !important;
+            }
+            
+            .header-title-block { 
+                text-align: center !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .header-eyebrow { 
+                font-size: 0.45rem !important;
+                color: var(--dorado) !important;
+                margin: 0 0 3px 0 !important;
+                letter-spacing: 2px !important;
+            }
+            
+            .title { 
+                font-size: 0.9rem !important;
+                color: var(--blanco) !important;
+                margin: 0 !important;
+                line-height: 1.1 !important;
+            }
+            
+            .title span { 
+                font-size: 1.1rem !important;
+                color: var(--dorado) !important;
+                text-shadow: none !important;
+                margin: 0 !important;
+            }
+            
+            .footer, 
+            .sidebar, 
+            .ficha-actions, 
+            .records-header, 
+            .btn, 
+            .delete-btn,
+            .login-container,
+            .delete-modal { 
+                display: none !important; 
+            }
+            
+            /* El content debe ser visible pero sin padding */
+            .content {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            .records-container { 
+                display: block !important; 
+                padding: 5px !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            
+            .records-layout { 
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .fichas-container { 
+                max-height: none !important; 
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .ficha { 
+                display: block !important; 
+                page-break-inside: avoid !important; 
+                margin: 0 0 20px 0 !important;
+                border: 1px solid #ccc !important;
+                border-radius: 6px !important;
+                overflow: hidden !important;
+            }
+            
+            .ficha-header { 
+                background: var(--granate) !important; 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+                padding: 8px 12px !important;
+                margin: 0 !important;
+            }
+            
+            .ficha-title {
+                color: var(--blanco) !important;
+                font-size: 0.95rem !important;
+                margin: 0 !important;
+            }
+            
+            .ficha-rif {
+                color: var(--dorado) !important;
+                font-size: 0.75rem !important;
+                margin: 2px 0 0 0 !important;
+            }
+            
+            .ficha-body { 
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px !important;
+                padding: 10px !important;
+                margin: 0 !important;
+                background: white !important;
+            }
+            
+            .ficha-field { 
+                background: #f5f3f0 !important;
+                border: 1px solid #e8e3dc !important;
+                border-left: 3px solid var(--granate) !important;
+                padding: 6px 8px !important;
+                border-radius: 4px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .ficha-field.ficha-full { 
+                grid-column: 1 / -1 !important; 
+            }
+            
+            .ficha-label {
+                color: var(--granate) !important;
+                font-size: 0.6rem !important;
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                margin: 0 0 3px 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .ficha-value {
+                color: #1a0305 !important;
+                font-size: 0.8rem !important;
+                font-weight: 500 !important;
+                margin: 0 !important;
+            }
         }
 
         @media (max-width: 900px) {
@@ -440,7 +624,7 @@
             }
             
             .container { 
-                margin: 10vh auto 0;
+                margin: 35vh auto 0;
                 border-radius: 6px;
             }
             
@@ -554,7 +738,7 @@
             }
             
             .container { 
-                margin: 5vh auto 0;
+                margin: 30vh auto 0;
             }
             
             .header-inner { 
