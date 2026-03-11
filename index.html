@@ -30,14 +30,15 @@
             background-position: 95% center;
             background-attachment: fixed;
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 15px 10px;
         }
 
         .container {
+            width: 100%;
             max-width: 950px;
-            margin: 35vh auto 0;
+            margin: 20vh auto 0;
             background: var(--blanco);
-            border-radius: 4px;
+            border-radius: 8px;
             box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.3);
             overflow: hidden;
             opacity: 0;
@@ -54,7 +55,7 @@
             overflow: hidden;
         }
         .header-top-bar { background: var(--dorado); height: 5px; position: relative; z-index: 3; }
-        .header-inner { padding: 25px 35px 35px; position: relative; z-index: 3; }
+        .header-inner { padding: 20px 20px 30px; position: relative; z-index: 3; }
 
         .header::after {
             content: '';
@@ -99,41 +100,6 @@
         }
 
         .title span { display: block; color: var(--dorado); font-size: 2.6rem; }
-
-        /* STATS */
-        .stats-band {
-            background: var(--gris-claro);
-            border-bottom: 1px solid var(--gris-medio);
-            padding: 30px 50px;
-        }
-
-        .stats { display: flex; justify-content: center; gap: 0; }
-
-        .stat-card {
-            flex: 1; max-width: 220px; text-align: center;
-            padding: 20px 30px; position: relative;
-        }
-
-        .stat-card:not(:last-child)::after {
-            content: ''; position: absolute; right: 0; top: 20%; height: 60%;
-            width: 1px; background: var(--gris-medio);
-        }
-
-        .stat-icon {
-            width: 44px; height: 44px; background: var(--granate);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 12px; color: var(--dorado); font-size: 1.1rem;
-        }
-
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem; font-weight: 700; color: var(--granate); line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.78rem; font-weight: 500; color: #888;
-            text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;
-        }
 
         /* CONTENT */
         .content { padding: 30px 35px; }
@@ -308,21 +274,161 @@
 
         .hidden { display: none !important; }
 
+        /* Responsive para celulares */
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .header-inner { padding: 25px 20px 40px; }
-            .logo { width: 75px; height: 75px; }
-            .title { font-size: 1.4rem; }
-            .title span { font-size: 1.8rem; }
-            .stats-band { padding: 20px; }
-            .stats { flex-wrap: wrap; }
-            .content { padding: 25px 20px; }
-            .form-row { grid-template-columns: 1fr; }
-            .form-container { padding: 20px; }
-            .login-card { padding: 30px 25px; }
-            .footer { padding: 25px 20px; }
-            .footer-inner { flex-direction: column; align-items: flex-start; }
-            .footer-right { align-items: flex-start; }
+            body { 
+                padding: 10px 5px; 
+            }
+            
+            .container { 
+                margin: 10vh auto 0;
+                border-radius: 6px;
+            }
+            
+            .header-inner { 
+                padding: 15px 15px 25px; 
+            }
+            
+            .logo-row { 
+                gap: 15px; 
+            }
+            
+            .logo { 
+                width: 60px; 
+                height: 60px; 
+                border-width: 2px;
+            }
+            
+            .header-eyebrow { 
+                font-size: 0.55rem; 
+                letter-spacing: 2px; 
+            }
+            
+            .title { 
+                font-size: 1.1rem; 
+            }
+            
+            .title span { 
+                font-size: 1.4rem; 
+            }
+            
+            .content { 
+                padding: 15px 12px; 
+            }
+            
+            .form-row { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .form-container { 
+                padding: 15px; 
+            }
+            
+            .login-card { 
+                padding: 25px 18px; 
+            }
+            
+            .login-icon { 
+                width: 50px; 
+                height: 50px; 
+                font-size: 1.3rem;
+            }
+            
+            .login-title { 
+                font-size: 1.3rem; 
+            }
+            
+            .section-icon { 
+                width: 40px; 
+                height: 40px; 
+                font-size: 1rem;
+            }
+            
+            .section-title { 
+                font-size: 1.2rem; 
+            }
+            
+            .section-title small { 
+                font-size: 0.7rem; 
+            }
+            
+            .footer { 
+                padding: 20px 15px; 
+            }
+            
+            .footer-inner { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 15px;
+            }
+            
+            .footer-right { 
+                align-items: flex-start; 
+            }
+            
+            .btn { 
+                padding: 12px 20px; 
+                font-size: 0.8rem; 
+                width: 100%;
+            }
+            
+            .form-actions { 
+                flex-direction: column; 
+                gap: 10px;
+            }
+            
+            input, select, textarea { 
+                font-size: 0.9rem; 
+                padding: 11px 12px;
+            }
+            
+            label { 
+                font-size: 0.75rem; 
+            }
+        }
+
+        /* Celulares muy pequeños */
+        @media (max-width: 480px) {
+            body { 
+                padding: 5px 3px; 
+            }
+            
+            .container { 
+                margin: 5vh auto 0;
+            }
+            
+            .header-inner { 
+                padding: 12px 10px 20px; 
+            }
+            
+            .logo { 
+                width: 50px; 
+                height: 50px; 
+            }
+            
+            .header-eyebrow { 
+                font-size: 0.5rem; 
+            }
+            
+            .title { 
+                font-size: 0.95rem; 
+            }
+            
+            .title span { 
+                font-size: 1.2rem; 
+            }
+            
+            .content { 
+                padding: 12px 8px; 
+            }
+            
+            .login-card { 
+                padding: 20px 15px; 
+            }
+            
+            .form-container { 
+                padding: 12px; 
+            }
         }
     </style>
 </head>
@@ -334,7 +440,7 @@
             <div class="header-pattern"></div>
             <div class="header-inner">
                 <div class="logo-row">
-                    <img src="logo 1.jpg" alt="Logo Institucional" class="logo">
+                    <img src="logo 1.jpg?v=2" alt="Logo Institucional" class="logo">
                     <div class="header-title-block">
                         <div class="header-eyebrow">República Bolivariana de Venezuela</div>
                         <h1 class="title">
@@ -342,27 +448,7 @@
                             <span>Desarrollo Económico</span>
                         </h1>
                     </div>
-                    <img src="logo 2.jpg" alt="Logo Secundario" class="logo">
-                </div>
-            </div>
-        </div>
-
-        <div class="stats-band">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-building"></i></div>
-                    <div class="stat-number" id="totalEmpresas">0</div>
-                    <div class="stat-label">Empresas Registradas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-number" id="totalEmpleados">0</div>
-                    <div class="stat-label">Empleados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="stat-number" id="totalMunicipios">0</div>
-                    <div class="stat-label">Municipios</div>
+                    <img src="logo 2.jpg?v=2" alt="Logo Secundario" class="logo">
                 </div>
             </div>
         </div>
@@ -818,7 +904,6 @@
                 document.getElementById('loginContainer').classList.add('hidden');
                 document.getElementById('formContainer').classList.remove('hidden');
                 showNotification('✓ Sesión iniciada');
-                updateStats();
             } else {
                 document.getElementById('loginContainer').classList.remove('hidden');
                 document.getElementById('formContainer').classList.add('hidden');
@@ -827,7 +912,6 @@
 
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('mainContainer').classList.add('loaded'), 100);
-            updateStats();
         });
 
         function showNotification(message, isError = false) {
@@ -871,37 +955,6 @@
             });
         }
 
-        async function updateStats() {
-            try {
-                const snapshot = await db.collection('empresas').get();
-                let totalEmpleados = 0;
-                const dirs = new Set();
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    totalEmpleados += (d.empleadosDirectos || 0) + (d.empleadosIndirectos || 0);
-                    if (d.direccion) dirs.add(d.direccion);
-                });
-                animateNumber('totalEmpresas', snapshot.size);
-                animateNumber('totalEmpleados', totalEmpleados);
-                animateNumber('totalMunicipios', dirs.size);
-            } catch (e) { console.error(e); }
-        }
-
-        function animateNumber(id, target) {
-            const el = document.getElementById(id);
-            const start = parseInt(el.textContent) || 0;
-            const duration = 900;
-            let startTime;
-            const step = (ts) => {
-                if (!startTime) startTime = ts;
-                const progress = Math.min((ts - startTime) / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                el.textContent = Math.floor(start + (target - start) * ease);
-                if (progress < 1) requestAnimationFrame(step);
-            };
-            requestAnimationFrame(step);
-        }
-
         document.getElementById('empresaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -927,7 +980,6 @@
                 await db.collection('empresas').add(formData);
                 showNotification('✓ Registro guardado correctamente');
                 document.getElementById('empresaForm').reset();
-                updateStats();
             } catch (error) {
                 showNotification('Error al guardar los datos', true);
             } finally {
